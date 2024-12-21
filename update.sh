@@ -202,12 +202,12 @@ add_wifi_default_set() {
     fi
 }
 
-update_default_lan_addr() {
-    local CFG_PATH="$BUILD_DIR/package/base-files/files/bin/config_generate"
-    if [ -f $CFG_PATH ]; then
+#update_default_lan_addr() {
+#    local CFG_PATH="$BUILD_DIR/package/base-files/files/bin/config_generate"
+#    if [ -f $CFG_PATH ]; then
         sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH
-    fi
-}
+#    fi
+#}
 
 #remove_something_nss_kmod() {
  #   local ipq_target_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/target.mk"
@@ -240,12 +240,12 @@ update_default_lan_addr() {
 #    fi
 #}
 
-remove_affinity_script() {
-    local affinity_script_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/init.d/set-irq-affinity"
-    if [ -f "$affinity_script_path" ]; then
-        \rm -f "$affinity_script_path"
-    fi
-}
+#remove_affinity_script() {
+#    local affinity_script_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/init.d/set-irq-affinity"
+#    if [ -f "$affinity_script_path" ]; then
+#        \rm -f "$affinity_script_path"
+#    fi
+#}
 
 fix_build_for_openssl() {
     local makefile="$BUILD_DIR/package/libs/openssl/Makefile"
@@ -451,12 +451,12 @@ main() {
     chk_fullconenat
     fix_mk_def_depends
     add_wifi_default_set
-    update_default_lan_addr
-    remove_something_nss_kmod
-    remove_affinity_script
+
+  
+   
     fix_build_for_openssl
-    update_ath11k_fw
-    fix_mkpkg_format_invalid
+   
+
     chanage_cpuusage
     update_tcping
     add_wg_chk

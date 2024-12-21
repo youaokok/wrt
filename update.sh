@@ -209,36 +209,36 @@ update_default_lan_addr() {
     fi
 }
 
-remove_something_nss_kmod() {
-    local ipq_target_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/target.mk"
-    local ipq_mk_path="$BUILD_DIR/target/linux/qualcommax/Makefile"
-    if [ -f $ipq_target_path ]; then
-        sed -i 's/kmod-qca-nss-drv-eogremgr//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-drv-gre//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-drv-map-t//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-drv-match//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-drv-mirror//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-drv-pvxlanmgr//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-drv-tun6rd//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-drv-tunipip6//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-drv-vxlanmgr//g' $ipq_target_path
-        sed -i 's/kmod-qca-nss-macsec//g' $ipq_target_path
-    fi
+#remove_something_nss_kmod() {
+ #   local ipq_target_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/target.mk"
+ #   local ipq_mk_path="$BUILD_DIR/target/linux/qualcommax/Makefile"
+ #   if [ -f $ipq_target_path ]; then
+ #       sed -i 's/kmod-qca-nss-drv-eogremgr//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-drv-gre//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-drv-map-t//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-drv-match//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-drv-mirror//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-drv-pvxlanmgr//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-drv-tun6rd//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-drv-tunipip6//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-drv-vxlanmgr//g' $ipq_target_path
+ #       sed -i 's/kmod-qca-nss-macsec//g' $ipq_target_path
+#    fi
 
-    if [ -f $ipq_mk_path ]; then
-        sed -i '/kmod-qca-nss-crypto/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-eogremgr/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-gre/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-map-t/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-match/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-mirror/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-tun6rd/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-tunipip6/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-vxlanmgr/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-drv-wifi-meshmgr/d' $ipq_mk_path
-        sed -i '/kmod-qca-nss-macsec/d' $ipq_mk_path
-    fi
-}
+ #   if [ -f $ipq_mk_path ]; then
+#        sed -i '/kmod-qca-nss-crypto/d' $ipq_mk_path
+ #       sed -i '/kmod-qca-nss-drv-eogremgr/d' $ipq_mk_path
+ #       sed -i '/kmod-qca-nss-drv-gre/d' $ipq_mk_path
+ #       sed -i '/kmod-qca-nss-drv-map-t/d' $ipq_mk_path
+ #       sed -i '/kmod-qca-nss-drv-match/d' $ipq_mk_path
+ #       sed -i '/kmod-qca-nss-drv-mirror/d' $ipq_mk_path
+ #       sed -i '/kmod-qca-nss-drv-tun6rd/d' $ipq_mk_path
+#        sed -i '/kmod-qca-nss-drv-tunipip6/d' $ipq_mk_path
+#        sed -i '/kmod-qca-nss-drv-vxlanmgr/d' $ipq_mk_path
+#        sed -i '/kmod-qca-nss-drv-wifi-meshmgr/d' $ipq_mk_path
+#        sed -i '/kmod-qca-nss-macsec/d' $ipq_mk_path
+#    fi
+#}
 
 remove_affinity_script() {
     local affinity_script_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/init.d/set-irq-affinity"
@@ -257,38 +257,38 @@ fix_build_for_openssl() {
     fi
 }
 
-update_ath11k_fw() {
-    local makefile="$BUILD_DIR/package/firmware/ath11k-firmware/Makefile"
-    local new_mk="$BASE_PATH/patches/ath11k_fw.mk"
+#update_ath11k_fw() {
+#    local makefile="$BUILD_DIR/package/firmware/ath11k-firmware/Makefile"
+#    local new_mk="$BASE_PATH/patches/ath11k_fw.mk"
 
-    if [ -d "$(dirname "$makefile")" ] && [ -f "$makefile" ]; then
-        [ -f "$new_mk" ] && \rm -f "$new_mk"
-        curl -L -o "$new_mk" https://raw.githubusercontent.com/VIKINGYFY/immortalwrt/refs/heads/main/package/firmware/ath11k-firmware/Makefile
-        \mv -f "$new_mk" "$makefile"
-    fi
-}
+#    if [ -d "$(dirname "$makefile")" ] && [ -f "$makefile" ]; then
+#        [ -f "$new_mk" ] && \rm -f "$new_mk"
+#        curl -L -o "$new_mk" https://raw.githubusercontent.com/VIKINGYFY/immortalwrt/refs/heads/main/package/firmware/ath11k-firmware/Makefile
+#        \mv -f "$new_mk" "$makefile"
+#    fi
+#}
 
-fix_mkpkg_format_invalid() {
-    if [[ $BUILD_DIR =~ "imm-nss" ]]; then
-        if [ -f $BUILD_DIR/feeds/small8/v2ray-geodata/Makefile ]; then
-            sed -i 's/VER)-\$(PKG_RELEASE)/VER)-r\$(PKG_RELEASE)/g' $BUILD_DIR/feeds/small8/v2ray-geodata/Makefile
-        fi
-        if [ -f $BUILD_DIR/feeds/small8/luci-lib-taskd/Makefile ]; then
-            sed -i 's/>=1\.0\.3-1/>=1\.0\.3-r1/g' $BUILD_DIR/feeds/small8/luci-lib-taskd/Makefile
-        fi
-        if [ -f $BUILD_DIR/feeds/small8/luci-app-openclash/Makefile ]; then
-            sed -i 's/PKG_RELEASE:=beta/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/small8/luci-app-openclash/Makefile
-        fi
-        if [ -f $BUILD_DIR/feeds/small8/luci-app-quickstart/Makefile ]; then
-            sed -i 's/PKG_VERSION:=0\.8\.16-1/PKG_VERSION:=0\.8\.16/g' $BUILD_DIR/feeds/small8/luci-app-quickstart/Makefile
-            sed -i 's/PKG_RELEASE:=$/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/small8/luci-app-quickstart/Makefile
-        fi
-        if [ -f $BUILD_DIR/feeds/small8/luci-app-store/Makefile ]; then
-            sed -i 's/PKG_VERSION:=0\.1\.27-1/PKG_VERSION:=0\.1\.27/g' $BUILD_DIR/feeds/small8/luci-app-store/Makefile
-            sed -i 's/PKG_RELEASE:=$/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/small8/luci-app-store/Makefile
-        fi
-    fi
-}
+# fix_mkpkg_format_invalid() {
+#    if [[ $BUILD_DIR =~ "imm-nss" ]]; then
+##        if [ -f $BUILD_DIR/feeds/small8/v2ray-geodata/Makefile ]; then
+#            sed -i 's/VER)-\$(PKG_RELEASE)/VER)-r\$(PKG_RELEASE)/g' $BUILD_DIR/feeds/small8/v2ray-geodata/Makefile
+#        fi
+#        if [ -f $BUILD_DIR/feeds/small8/luci-lib-taskd/Makefile ]; then
+#            sed -i 's/>=1\.0\.3-1/>=1\.0\.3-r1/g' $BUILD_DIR/feeds/small8/luci-lib-taskd/Makefile
+#        fi
+#        if [ -f $BUILD_DIR/feeds/small8/luci-app-openclash/Makefile ]; then
+#            sed -i 's/PKG_RELEASE:=beta/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/small8/luci-app-openclash/Makefile
+#        fi
+#        if [ -f $BUILD_DIR/feeds/small8/luci-app-quickstart/Makefile ]; then
+#            sed -i 's/PKG_VERSION:=0\.8\.16-1/PKG_VERSION:=0\.8\.16/g' $BUILD_DIR/feeds/small8/luci-app-quickstart/Makefile
+#            sed -i 's/PKG_RELEASE:=$/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/small8/luci-app-quickstart/Makefile
+#        fi
+#        if [ -f $BUILD_DIR/feeds/small8/luci-app-store/Makefile ]; then
+#            sed -i 's/PKG_VERSION:=0\.1\.27-1/PKG_VERSION:=0\.1\.27/g' $BUILD_DIR/feeds/small8/luci-app-store/Makefile
+#            sed -i 's/PKG_RELEASE:=$/PKG_RELEASE:=1/g' $BUILD_DIR/feeds/small8/luci-app-store/Makefile
+#        fi
+#    fi
+#} 
 
 add_ax6600_led() {
     local target_dir="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files"

@@ -99,7 +99,7 @@ remove_unwanted_packages() {
         \rm -rf ./feeds/luci/themes/$pkg
     done
 
-  #  for pkg in "${packages_net[@]}"; do
+    for pkg in "${packages_net[@]}"; do
         \rm -rf ./feeds/packages/net/$pkg
     done
 

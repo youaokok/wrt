@@ -191,23 +191,23 @@ fix_mk_def_depends() {
     fi
 }
 
-add_wifi_default_set() {
-    local uci_dir="$BUILD_DIR/package/base-files/files/etc/uci-defaults"
-    local ipq_uci_dir="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/uci-defaults"
-    if [ -f "$uci_dir/990_set-wireless.sh" ]; then
-        \rm -f "$uci_dir/990_set-wireless.sh"
-    fi
-    if [ -d "$ipq_uci_dir" ]; then
-        install -m 755 -D "$BASE_PATH/patches/992_set-wifi-uci.sh" "$ipq_uci_dir/992_set-wifi-uci.sh"
-    fi
-}
+#add_wifi_default_set() {
+#    local uci_dir="$BUILD_DIR/package/base-files/files/etc/uci-defaults"
+#    local ipq_uci_dir="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/uci-defaults"
+#    if [ -f "$uci_dir/990_set-wireless.sh" ]; then
+#        \rm -f "$uci_dir/990_set-wireless.sh"
+#    fi
+#    if [ -d "$ipq_uci_dir" ]; then
+#        install -m 755 -D "$BASE_PATH/patches/992_set-wifi-uci.sh" "$ipq_uci_dir/992_set-wifi-uci.sh"
+#    fi
+# }
 
-update_default_lan_addr() {
-    local CFG_PATH="$BUILD_DIR/package/base-files/files/bin/config_generate"
-    if [ -f $CFG_PATH ]; then
-        sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH
-    fi
-}
+# update_default_lan_addr() {
+#    local CFG_PATH="$BUILD_DIR/package/base-files/files/bin/config_generate"
+#    if [ -f $CFG_PATH ]; then
+#        sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH
+#    fi
+# }
 
 
 
@@ -421,8 +421,8 @@ main() {
     change_dnsmasq2full
     chk_fullconenat
     fix_mk_def_depends
-    add_wifi_default_set
-    update_default_lan_addr
+   # add_wifi_default_set
+   # update_default_lan_addr
    # remove_something_nss_kmod
     remove_affinity_script
     fix_build_for_openssl

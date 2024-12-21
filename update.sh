@@ -90,22 +90,22 @@ remove_unwanted_packages() {
         "chinadns-ng" "ipt2socks" "tcping" "trojan-plus" "simple-obfs"
         "shadowsocksr-libev" "dae" "daed" "mihomo" "geoview"
     )
-    local small8_packages=(
-        "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq"
-    )
-
+   # local small8_packages=(
+   #     "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq"
+   # )
+#
     for pkg in "${luci_packages[@]}"; do
         \rm -rf ./feeds/luci/applications/$pkg
         \rm -rf ./feeds/luci/themes/$pkg
     done
 
-    for pkg in "${packages_net[@]}"; do
+  #  for pkg in "${packages_net[@]}"; do
         \rm -rf ./feeds/packages/net/$pkg
     done
 
-    for pkg in "${small8_packages[@]}"; do
-        \rm -rf ./feeds/small8/$pkg
-    done
+   # for pkg in "${small8_packages[@]}"; do
+  #      \rm -rf ./feeds/small8/$pkg
+  #  done
 
     if [[ -d ./package/istore ]]; then
         \rm -rf ./package/istore

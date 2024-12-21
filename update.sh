@@ -189,7 +189,7 @@ main() {
     clean_up
     reset_feeds_conf
   
-    fix_mk_def_depends
+    fix_default_set
    
   
    

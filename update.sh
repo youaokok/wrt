@@ -465,7 +465,7 @@ main() {
     update_pw_ha_chk
     install_opkg_distfeeds
     update_nss_pbuf_performance
-    install_feeds
+    
 }
 
 main "$@"

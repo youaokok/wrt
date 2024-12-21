@@ -119,31 +119,31 @@ update_golang() {
     fi
 }
 
-install_small8() {
-    ./scripts/feeds install -p small8 -f xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
-        naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata v2ray-geoview v2ray-plugin \
-        tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
-        luci-app-passwall alist luci-app-alist smartdns luci-app-smartdns v2dat mosdns luci-app-mosdns \
-        adguardhome luci-app-adguardhome ddns-go luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd \
-        luci-app-store quickstart luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest \
-        luci-theme-argon netdata luci-app-netdata lucky luci-app-lucky luci-app-openclash mihomo \
-        luci-app-mihomo luci-app-homeproxy
-}
-
-install_feeds() {
-    ./scripts/feeds update -i
-    for dir in $BUILD_DIR/feeds/*; do
+#install_small8() {
+#    ./scripts/feeds install -p small8 -f xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
+#        naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata v2ray-geoview v2ray-plugin \
+ #       tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
+#        luci-app-passwall alist luci-app-alist smartdns luci-app-smartdns v2dat mosdns luci-app-mosdns \
+#        adguardhome luci-app-adguardhome ddns-go luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd \
+#        luci-app-store quickstart luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest \
+#        luci-theme-argon netdata luci-app-netdata lucky luci-app-lucky luci-app-openclash mihomo \
+#        luci-app-mihomo luci-app-homeproxy
+#}
+#
+#install_feeds() {
+#    ./scripts/feeds update -i
+#    for dir in $BUILD_DIR/feeds/*; do
         # 检查是否为目录并且不以 .tmp 结尾，并且不是软链接
-        if [ -d "$dir" ] && [[ ! "$dir" == *.tmp ]] && [ ! -L "$dir" ]; then
-            if [[ $(basename "$dir") == "small8" ]]; then
-                install_small8
-            else
-                ./scripts/feeds install -f -ap $(basename "$dir")
-            fi
-        fi
-    done
-}
-
+#        if [ -d "$dir" ] && [[ ! "$dir" == *.tmp ]] && [ ! -L "$dir" ]; then
+#            if [[ $(basename "$dir") == "small8" ]]; then
+#                install_small8
+#            else
+#                ./scripts/feeds install -f -ap $(basename "$dir")
+#            fi
+#        fi
+#    done
+# }
+#
 fix_default_set() {
     #修改默认主题
     sed -i "s/luci-theme-bootstrap/luci-theme-$THEME_SET/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")

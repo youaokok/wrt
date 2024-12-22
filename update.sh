@@ -130,19 +130,19 @@ install_small8() {
         luci-app-mihomo luci-app-homeproxy
 }
 
-install_feeds() {
-    ./scripts/feeds update -i
-    for dir in $BUILD_DIR/feeds/*; do
+# install_feeds() {
+#    ./scripts/feeds update -i
+#    for dir in $BUILD_DIR/feeds/*; do
         # 检查是否为目录并且不以 .tmp 结尾，并且不是软链接
-        if [ -d "$dir" ] && [[ ! "$dir" == *.tmp ]] && [ ! -L "$dir" ]; then
-            if [[ $(basename "$dir") == "small8" ]]; then
-                install_small8
-            else
-                ./scripts/feeds install -f -ap $(basename "$dir")
-            fi
-        fi
-    done
-}
+#        if [ -d "$dir" ] && [[ ! "$dir" == *.tmp ]] && [ ! -L "$dir" ]; then
+#            if [[ $(basename "$dir") == "small8" ]]; then
+#                install_small8
+#            else
+#                ./scripts/feeds install -f -ap $(basename "$dir")
+#            fi
+#        fi
+#    done
+#}
 
 fix_default_set() {
     #修改默认主题
@@ -315,70 +315,22 @@ chanage_cpuusage() {
     find $BUILD_DIR/package/base-files/files/etc/uci-defaults/ -type f -name "9*.sh" -exec rm -f {} +
 }
 
-update_tcping() {
-    local tcping_path="$BUILD_DIR/feeds/small8/tcping/Makefile"
+# update_tcping() {
+  
+# }
 
-    if [ -d "$(dirname "$tcping_path")" ] && [ -f "$tcping_path" ]; then
-        \rm -f "$tcping_path"
-        curl -L -o "$tcping_path" https://raw.githubusercontent.com/xiaorouji/openwrt-passwall-packages/refs/heads/main/tcping/Makefile
-    fi
-}
+# set_custom_task() {
+# }
 
-set_custom_task() {
-    local sh_dir="$BUILD_DIR/package/base-files/files/etc/init.d"
-    cat <<'EOF' >"$sh_dir/custom_task"
-#!/bin/sh /etc/rc.common
-# 设置启动优先级
-START=99
+# add_wg_chk() {
+#    local sbin_path="$BUILD_DIR/package/base-files/files/sbin"
+#    if [[ -d "$sbin_path" ]]; then
+#        install -m 755 -D "$BASE_PATH/patches/wireguard_check.sh" "$sbin_path/wireguard_check.sh"
+#    fi
+# }
 
-boot() {
-    # 重新添加缓存请求定时任务
-    sed -i '/drop_caches/d' /etc/crontabs/root
-    echo "15 3 * * * sync && echo 3 > /proc/sys/vm/drop_caches" >>/etc/crontabs/root
-
-    # 删除现有的 wireguard_check 任务
-    sed -i '/wireguard_check/d' /etc/crontabs/root
-
-    # 获取 WireGuard 接口名称
-    local wg_ifname=$(wg show | awk '/interface/ {print $2}')
-
-    if [ -n "$wg_ifname" ]; then
-        # 添加新的 wireguard_check 任务，每10分钟执行一次
-        echo "*/10 * * * * /sbin/wireguard_check.sh" >>/etc/crontabs/root
-        uci set system.@system[0].cronloglevel='9'
-        uci commit system
-        /etc/init.d/cron restart
-    fi
-
-    # 应用新的 crontab 配置
-    crontab /etc/crontabs/root
-}
-EOF
-    chmod +x "$sh_dir/custom_task"
-}
-
-add_wg_chk() {
-    local sbin_path="$BUILD_DIR/package/base-files/files/sbin"
-    if [[ -d "$sbin_path" ]]; then
-        install -m 755 -D "$BASE_PATH/patches/wireguard_check.sh" "$sbin_path/wireguard_check.sh"
-    fi
-}
-
-update_pw_ha_chk() {
-    local pw_ha_path="$BUILD_DIR/feeds/small8/luci-app-passwall/root/usr/share/passwall/haproxy_check.sh"
-    local new_path="$BASE_PATH/patches/haproxy_check.sh"
-    local ha_lua_path="$BUILD_DIR/feeds/small8/luci-app-passwall/root/usr/share/passwall/haproxy.lua"
-
-    if [ -f "$pw_ha_path" ]; then
-        rm -f "$pw_ha_path"
-    fi
-
-    install -m 755 -D "$new_path" "$pw_ha_path"
-
-    if [ -f $ha_lua_path ]; then
-        sed -i 's/rise 1 fall 3/rise 3 fall 2/g' "$ha_lua_path"
-    fi
-}
+# 1 update_pw_ha_chk() {
+ 
 
 #install_opkg_distfeeds() {
     # 只处理aarch64
@@ -429,14 +381,14 @@ main() {
     update_ath11k_fw
     fix_mkpkg_format_invalid
     chanage_cpuusage
-    update_tcping
-    add_wg_chk
+  #  update_tcping
+  #  add_wg_chk
     add_ax6600_led
-    set_custom_task
-    update_pw_ha_chk
+   # set_custom_task
+   # update_pw_ha_chk
    # install_opkg_distfeeds
    # update_nss_pbuf_performance
-    install_feeds
+   # install_feeds
 }
 
 main "$@"

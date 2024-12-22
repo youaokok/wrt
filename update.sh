@@ -46,14 +46,8 @@ clean_up() {
     fi
 }
 
-reset_feeds_conf() {
-    git reset --hard origin/$REPO_BRANCH
-    git clean -f -d
-    git pull
-    if [[ $COMMIT_HASH != "none" ]]; then
-        git checkout $COMMIT_HASH
-    fi
-}
+# reset_feeds_conf() {
+# }
 
 # update_feeds() {
   
@@ -271,7 +265,7 @@ chanage_cpuusage() {
 main() {
     clone_repo
     clean_up
-    reset_feeds_conf
+   # reset_feeds_conf
    # update_feeds
    # remove_unwanted_packages
     fix_default_set

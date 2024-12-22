@@ -55,80 +55,18 @@ reset_feeds_conf() {
     fi
 }
 
-update_feeds() {
-    # 删除注释行
-    sed -i '/^#/d' "$BUILD_DIR/$FEEDS_CONF"
+# update_feeds() {
+  
+# }
 
-    # 检查并添加 small-package 源
-    if ! grep -q "small-package" "$BUILD_DIR/$FEEDS_CONF"; then
-        # 确保文件以换行符结尾
-        [ -z "$(tail -c 1 "$BUILD_DIR/$FEEDS_CONF")" ] || echo "" >>"$BUILD_DIR/$FEEDS_CONF"
-        echo "src-git small8 https://github.com/kenzok8/small-package" >>"$BUILD_DIR/$FEEDS_CONF"
-    fi
+# remove_unwanted_packages() {
+# }
 
-    # 添加bpf.mk解决更新报错
-    if [ ! -f "$BUILD_DIR/include/bpf.mk" ]; then
-        touch "$BUILD_DIR/include/bpf.mk"
-    fi
+# update_golang() {
+# }
 
-    # 更新 feeds
-    ./scripts/feeds clean
-    ./scripts/feeds update -a
-}
-
-remove_unwanted_packages() {
-    local luci_packages=(
-        "luci-app-passwall" "luci-app-smartdns" "luci-app-ddns-go" "luci-app-rclone"
-        "luci-app-ssr-plus" "luci-app-vssr" "luci-theme-argon" "luci-app-daed" "luci-app-dae"
-        "luci-app-alist" "luci-app-argon-config" "luci-app-homeproxy" "luci-app-haproxy-tcp"
-        "luci-app-openclash" "luci-app-mihomo"
-    )
-    local packages_net=(
-        "haproxy" "xray-core" "xray-plugin" "dns2tcp" "dns2socks" "alist" "hysteria"
-        "smartdns" "mosdns" "adguardhome" "ddns-go" "naiveproxy" "shadowsocks-rust"
-        "sing-box" "v2ray-core" "v2ray-geodata" "v2ray-plugin" "tuic-client"
-        "chinadns-ng" "ipt2socks" "tcping" "trojan-plus" "simple-obfs"
-        "shadowsocksr-libev" "dae" "daed" "mihomo" "geoview"
-    )
-    local small8_packages=(
-        "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq"
-    )
-
-    for pkg in "${luci_packages[@]}"; do
-        \rm -rf ./feeds/luci/applications/$pkg
-        \rm -rf ./feeds/luci/themes/$pkg
-    done
-
-    for pkg in "${packages_net[@]}"; do
-        \rm -rf ./feeds/packages/net/$pkg
-    done
-
-    for pkg in "${small8_packages[@]}"; do
-        \rm -rf ./feeds/small8/$pkg
-    done
-
-    if [[ -d ./package/istore ]]; then
-        \rm -rf ./package/istore
-    fi
-}
-
-update_golang() {
-    if [[ -d ./feeds/packages/lang/golang ]]; then
-        \rm -rf ./feeds/packages/lang/golang
-        git clone $GOLANG_REPO -b $GOLANG_BRANCH ./feeds/packages/lang/golang
-    fi
-}
-
-install_small8() {
-    ./scripts/feeds install -p small8 -f xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
-        naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata v2ray-geoview v2ray-plugin \
-        tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
-        luci-app-passwall alist luci-app-alist smartdns luci-app-smartdns v2dat mosdns luci-app-mosdns \
-        adguardhome luci-app-adguardhome ddns-go luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd \
-        luci-app-store quickstart luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest \
-        luci-theme-argon netdata luci-app-netdata lucky luci-app-lucky luci-app-openclash mihomo \
-        luci-app-mihomo luci-app-homeproxy
-}
+# install_small8()
+# }
 
 # install_feeds() {
 #    ./scripts/feeds update -i
@@ -211,12 +149,9 @@ fix_mk_def_depends() {
 
 
 
-remove_affinity_script() {
-    local affinity_script_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/init.d/set-irq-affinity"
-    if [ -f "$affinity_script_path" ]; then
-        \rm -f "$affinity_script_path"
-    fi
-}
+# remove_affinity_script() {
+  
+# }
 
 fix_build_for_openssl() {
     local makefile="$BUILD_DIR/package/libs/openssl/Makefile"
@@ -261,37 +196,9 @@ fix_mkpkg_format_invalid() {
     fi
 }
 
-add_ax6600_led() {
-    local target_dir="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files"
-    local initd_dir="$target_dir/etc/init.d"
-    local sbin_dir="$target_dir/sbin"
-    local athena_led_dir="$BUILD_DIR/package/emortal/luci-app-athena-led"
+# add_ax6600_led() {
 
-    if [ -d "$(dirname "$target_dir")" ] && [ -d "$initd_dir" ]; then
-        cat <<'EOF' >"$initd_dir/start_screen"
-#!/bin/sh /etc/rc.common
-
-START=99
-
-boot() {
-    case $(board_name) in
-    jdcloud,ax6600|\
-    jdcloud,re-cs-02)
-        ax6600_led >/dev/null 2>&1 &
-        ;;
-    esac
-}
-EOF
-        chmod +x "$initd_dir/start_screen"
-        mkdir -p "$sbin_dir"
-        install -m 755 -D "$BASE_PATH/patches/ax6600_led" "$sbin_dir/ax6600_led"
-
-        # 临时加一下
-        install -m 755 -D "$BASE_PATH/patches/cpuusage" "$sbin_dir/cpuusage"
-    fi
-
-    \rm -rf $athena_led_dir 2>/dev/null
-}
+# }
 
 chanage_cpuusage() {
     local luci_dir="$BUILD_DIR/feeds/luci/modules/luci-base/root/usr/share/rpcd/ucode/luci"
@@ -365,25 +272,25 @@ main() {
     clone_repo
     clean_up
     reset_feeds_conf
-    update_feeds
-    remove_unwanted_packages
+   # update_feeds
+   # remove_unwanted_packages
     fix_default_set
    # fix_miniupmpd
-    update_golang
+   # update_golang
     change_dnsmasq2full
     chk_fullconenat
     fix_mk_def_depends
    # add_wifi_default_set
    # update_default_lan_addr
    # remove_something_nss_kmod
-    remove_affinity_script
+   # remove_affinity_script
     fix_build_for_openssl
     update_ath11k_fw
     fix_mkpkg_format_invalid
     chanage_cpuusage
   #  update_tcping
   #  add_wg_chk
-    add_ax6600_led
+  #  add_ax6600_led
    # set_custom_task
    # update_pw_ha_chk
    # install_opkg_distfeeds

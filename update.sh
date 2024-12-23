@@ -401,13 +401,13 @@ install_opkg_distfeeds() {
     fi
  }
 
- #update_nss_pbuf_performance() {
- #   local pbuf_path="$BUILD_DIR/package/kernel/mac80211/files/pbuf.uci"
- #   if [ -d "$(dirname "$pbuf_path")" ] && [ -f $pbuf_path ]; then
- #       sed -i "s/auto_scale '1'/auto_scale 'off'/g" $pbuf_path
- #       sed -i "s/scaling_governor 'schedutil'/scaling_governor 'performance'/g" $pbuf_path
- #   fi
- #}
+# update_nss_pbuf_performance() {
+#    local pbuf_path="$BUILD_DIR/package/kernel/mac80211/files/pbuf.uci"
+#    if [ -d "$(dirname "$pbuf_path")" ] && [ -f $pbuf_path ]; then
+#        sed -i "s/auto_scale '1'/auto_scale 'off'/g" $pbuf_path
+#        sed -i "s/scaling_governor 'schedutil'/scaling_governor 'performance'/g" $pbuf_path
+#    fi
+# }
 
 main() {
     clone_repo
@@ -435,7 +435,7 @@ main() {
     set_custom_task
     update_pw_ha_chk
     install_opkg_distfeeds
-  #  update_nss_pbuf_performance
+   # update_nss_pbuf_performance
     install_feeds
 }
 

@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/sh '#31A1A1'
 
 if [ ! -f /etc/config/argon ]; then
     touch /etc/config/argon
     uci add argon global
-    uci set argon.@global[0].primary='#31A1A1'
+    uci set argon.@global[0].primary='#ffc0cb'
     uci commit argon
 fi

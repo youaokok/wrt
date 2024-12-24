@@ -80,7 +80,7 @@ remove_unwanted_packages() {
     local luci_packages=(
         "luci-app-passwall" "luci-app-smartdns" "luci-app-ddns-go" "luci-app-rclone"
         "luci-app-ssr-plus" "luci-app-vssr" "luci-theme-argon" "luci-app-daed" "luci-app-dae"
-        "luci-app-alist" "luci-app-argon-config" "luci-app-homeproxy" "luci-app-haproxy-tcp"
+        "luci-app-alist" "luci-app-argon-config" "luci-app-haproxy-tcp"
         "luci-app-openclash" "luci-app-mihomo"
     )
     local packages_net=(
@@ -358,7 +358,6 @@ add_wg_chk() {
 }
 
 
-}
 
 
 main() {

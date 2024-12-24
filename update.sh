@@ -182,12 +182,12 @@ install_feeds() {
 #    fi
 #}
 
-fix_mk_def_depends() {
-    sed -i 's/libustream-mbedtls/libustream-openssl/g' $BUILD_DIR/include/target.mk 2>/dev/null
-    if [ -f $BUILD_DIR/target/linux/qualcommax/Makefile ]; then
-        sed -i 's/wpad-basic-mbedtls/wpad-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
-    fi
-}
+#fix_mk_def_depends() {
+#    sed -i 's/libustream-mbedtls/libustream-openssl/g' $BUILD_DIR/include/target.mk 2>/dev/null
+#    if [ -f $BUILD_DIR/target/linux/qualcommax/Makefile ]; then
+ #       sed -i 's/wpad-basic-mbedtls/wpad-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
+#    fi
+#}
 
 #add_wifi_default_set() {
 #    local uci_dir="$BUILD_DIR/package/base-files/files/etc/uci-defaults"

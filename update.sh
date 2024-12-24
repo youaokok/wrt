@@ -209,12 +209,12 @@ install_feeds() {
 
 
 
-#remove_affinity_script() {
-#    local affinity_script_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/init.d/set-irq-affinity"
-#    if [ -f "$affinity_script_path" ]; then
-#        \rm -f "$affinity_script_path"
-#    fi
-#}
+remove_affinity_script() {
+    local affinity_script_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/init.d/set-irq-affinity"
+    if [ -f "$affinity_script_path" ]; then
+        \rm -f "$affinity_script_path"
+    fi
+}
 
 fix_build_for_openssl() {
     local makefile="$BUILD_DIR/package/libs/openssl/Makefile"
@@ -373,7 +373,7 @@ main() {
    # add_wifi_default_set
    # update_default_lan_addr
    # remove_something_nss_kmod
-   # remove_affinity_script
+    remove_affinity_script
     fix_build_for_openssl
     update_ath11k_fw
     fix_mkpkg_format_invalid

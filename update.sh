@@ -142,18 +142,18 @@ install_feeds() {
     done
 }
 
-fix_default_set() {
+#fix_default_set() {
     #修改默认主题
-    sed -i "s/luci-theme-bootstrap/luci-theme-$THEME_SET/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
+#    sed -i "s/luci-theme-bootstrap/luci-theme-$THEME_SET/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
 
-    install -m 755 -D "$BASE_PATH/patches/99_set_argon_primary" "$BUILD_DIR/package/base-files/files/etc/uci-defaults/99_set_argon_primary"
+#    install -m 755 -D "$BASE_PATH/patches/99_set_argon_primary" "$BUILD_DIR/package/base-files/files/etc/uci-defaults/99_set_argon_primary"
 
-    if [ -f $BUILD_DIR/package/emortal/autocore/files/tempinfo ]; then
-        if [ -f $BASE_PATH/patches/tempinfo ]; then
-            \cp -f $BASE_PATH/patches/tempinfo ./package/emortal/autocore/files/tempinfo
-        fi
-    fi
-}
+#    if [ -f $BUILD_DIR/package/emortal/autocore/files/tempinfo ]; then
+#        if [ -f $BASE_PATH/patches/tempinfo ]; then
+#            \cp -f $BASE_PATH/patches/tempinfo ./package/emortal/autocore/files/tempinfo
+#        fi
+#    fi
+# }
 
  fix_miniupmpd() {
     local PKG_HASH=$(awk -F"=" '/^PKG_HASH:/ {print $2}' ./feeds/packages/net/miniupnpd/Makefile)
@@ -364,7 +364,7 @@ main() {
     reset_feeds_conf
     update_feeds
     remove_unwanted_packages
-    fix_default_set
+   # fix_default_set
     fix_miniupmpd
     update_golang
     change_dnsmasq2full

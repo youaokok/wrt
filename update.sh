@@ -167,20 +167,20 @@ install_feeds() {
     fi
  }
 
-change_dnsmasq2full() {
-    if ! grep -q "dnsmasq-full" $BUILD_DIR/include/target.mk; then
-        sed -i 's/dnsmasq/dnsmasq-full/g' ./include/target.mk
-    fi
-}
+#change_dnsmasq2full() {
+#    if ! grep -q "dnsmasq-full" $BUILD_DIR/include/target.mk; then
+#        sed -i 's/dnsmasq/dnsmasq-full/g' ./include/target.mk
+#    fi
+#}
 
-chk_fullconenat() {
-    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat-nft ]; then
-        \cp -rf $BASE_PATH/fullconenat/fullconenat-nft $BUILD_DIR/package/network/utils
-    fi
-    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat ]; then
-        \cp -rf $BASE_PATH/fullconenat/fullconenat $BUILD_DIR/package/network/utils
-    fi
-}
+#chk_fullconenat() {
+#    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat-nft ]; then
+#        \cp -rf $BASE_PATH/fullconenat/fullconenat-nft $BUILD_DIR/package/network/utils
+#    fi
+#    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat ]; then
+#        \cp -rf $BASE_PATH/fullconenat/fullconenat $BUILD_DIR/package/network/utils
+#    fi
+#}
 
 fix_mk_def_depends() {
     sed -i 's/libustream-mbedtls/libustream-openssl/g' $BUILD_DIR/include/target.mk 2>/dev/null
@@ -367,8 +367,8 @@ main() {
    # fix_default_set
     fix_miniupmpd
     update_golang
-    change_dnsmasq2full
-    chk_fullconenat
+   # change_dnsmasq2full
+   # chk_fullconenat
     fix_mk_def_depends
    # add_wifi_default_set
    # update_default_lan_addr

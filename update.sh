@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+#临时修复luci无法保存的问题
+sed -i "s/\[sid\]\.hasOwnProperty/\[sid\]\?\.hasOwnProperty/g" $(find ./feeds/luci/modules/luci-base/ -type f -name "uci.js")
 
 set -e
 set -o errexit

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 set -e
 set -o errexit
 set -o errtrace
@@ -78,17 +79,15 @@ update_feeds() {
 
 remove_unwanted_packages() {
     local luci_packages=(
-        "luci-app-passwall" "luci-app-smartdns" "luci-app-ddns-go" "luci-app-rclone"
-        "luci-app-ssr-plus" "luci-app-vssr" "luci-theme-argon" "luci-app-daed" "luci-app-dae"
-        "luci-app-alist" "luci-app-argon-config" "luci-app-homeproxy" "luci-app-haproxy-tcp"
-        "luci-app-openclash" "luci-app-mihomo"
+        
+       "luci-theme-argon" 
+       
     )
     local packages_net=(
-        "haproxy" "xray-core" "xray-plugin" "dns2tcp" "dns2socks" "alist" "hysteria"
-        "smartdns" "mosdns" "adguardhome" "ddns-go" "naiveproxy" "shadowsocks-rust"
-        "sing-box" "v2ray-core" "v2ray-geodata" "v2ray-plugin" "tuic-client"
-        "chinadns-ng" "ipt2socks" "tcping" "trojan-plus" "simple-obfs"
-        "shadowsocksr-libev" "dae" "daed" "mihomo" "geoview"
+    
+        
+        "chinadns-ng" 
+        
     )
    # local small8_packages=(
    #     "ppp" "firewall" "dae" "daed" "daed-next" "libnftnl" "nftables" "dnsmasq"
@@ -144,52 +143,52 @@ install_feeds() {
     done
 }
 
-fix_default_set() {
+#fix_default_set() {
     #修改默认主题
-    sed -i "s/luci-theme-bootstrap/luci-theme-$THEME_SET/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
+#    sed -i "s/luci-theme-bootstrap/luci-theme-$THEME_SET/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
 
-    install -m 755 -D "$BASE_PATH/patches/99_set_argon_primary" "$BUILD_DIR/package/base-files/files/etc/uci-defaults/99_set_argon_primary"
+#    install -m 755 -D "$BASE_PATH/patches/99_set_argon_primary" "$BUILD_DIR/package/base-files/files/etc/uci-defaults/99_set_argon_primary"
 
-    if [ -f $BUILD_DIR/package/emortal/autocore/files/tempinfo ]; then
-        if [ -f $BASE_PATH/patches/tempinfo ]; then
-            \cp -f $BASE_PATH/patches/tempinfo ./package/emortal/autocore/files/tempinfo
-        fi
-    fi
-}
-
-# fix_miniupmpd() {
-#    local PKG_HASH=$(awk -F"=" '/^PKG_HASH:/ {print $2}' ./feeds/packages/net/miniupnpd/Makefile)
-#    if [[ $PKG_HASH == "fbdd5501039730f04a8420ea2f8f54b7df63f9f04cde2dc67fa7371e80477bbe" ]]; then
-#        if [[ -f $BASE_PATH/patches/400-fix_nft_miniupnp.patch ]]; then
-#            if [[ ! -d ./feeds/packages/net/miniupnpd/patches ]]; then
-#                mkdir -p ./feeds/packages/net/miniupnpd/patches
-#            fi
-#            \cp -f $BASE_PATH/patches/400-fix_nft_miniupnp.patch ./feeds/packages/net/miniupnpd/patches/
+#    if [ -f $BUILD_DIR/package/emortal/autocore/files/tempinfo ]; then
+#        if [ -f $BASE_PATH/patches/tempinfo ]; then
+#            \cp -f $BASE_PATH/patches/tempinfo ./package/emortal/autocore/files/tempinfo
 #        fi
 #    fi
 # }
 
-change_dnsmasq2full() {
-    if ! grep -q "dnsmasq-full" $BUILD_DIR/include/target.mk; then
-        sed -i 's/dnsmasq/dnsmasq-full/g' ./include/target.mk
+ fix_miniupmpd() {
+    local PKG_HASH=$(awk -F"=" '/^PKG_HASH:/ {print $2}' ./feeds/packages/net/miniupnpd/Makefile)
+    if [[ $PKG_HASH == "fbdd5501039730f04a8420ea2f8f54b7df63f9f04cde2dc67fa7371e80477bbe" ]]; then
+        if [[ -f $BASE_PATH/patches/400-fix_nft_miniupnp.patch ]]; then
+            if [[ ! -d ./feeds/packages/net/miniupnpd/patches ]]; then
+                mkdir -p ./feeds/packages/net/miniupnpd/patches
+            fi
+            \cp -f $BASE_PATH/patches/400-fix_nft_miniupnp.patch ./feeds/packages/net/miniupnpd/patches/
+        fi
     fi
-}
+ }
 
-chk_fullconenat() {
-    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat-nft ]; then
-        \cp -rf $BASE_PATH/fullconenat/fullconenat-nft $BUILD_DIR/package/network/utils
-    fi
-    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat ]; then
-        \cp -rf $BASE_PATH/fullconenat/fullconenat $BUILD_DIR/package/network/utils
-    fi
-}
+#change_dnsmasq2full() {
+#    if ! grep -q "dnsmasq-full" $BUILD_DIR/include/target.mk; then
+#        sed -i 's/dnsmasq/dnsmasq-full/g' ./include/target.mk
+#    fi
+#}
 
-fix_mk_def_depends() {
-    sed -i 's/libustream-mbedtls/libustream-openssl/g' $BUILD_DIR/include/target.mk 2>/dev/null
-    if [ -f $BUILD_DIR/target/linux/qualcommax/Makefile ]; then
-        sed -i 's/wpad-basic-mbedtls/wpad-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
-    fi
-}
+#chk_fullconenat() {
+#    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat-nft ]; then
+#        \cp -rf $BASE_PATH/fullconenat/fullconenat-nft $BUILD_DIR/package/network/utils
+#    fi
+#    if [ ! -d $BUILD_DIR/package/network/utils/fullconenat ]; then
+#        \cp -rf $BASE_PATH/fullconenat/fullconenat $BUILD_DIR/package/network/utils
+#    fi
+#}
+
+#fix_mk_def_depends() {
+#    sed -i 's/libustream-mbedtls/libustream-openssl/g' $BUILD_DIR/include/target.mk 2>/dev/null
+#    if [ -f $BUILD_DIR/target/linux/qualcommax/Makefile ]; then
+ #       sed -i 's/wpad-basic-mbedtls/wpad-openssl/g' $BUILD_DIR/target/linux/qualcommax/Makefile
+#    fi
+#}
 
 #add_wifi_default_set() {
 #    local uci_dir="$BUILD_DIR/package/base-files/files/etc/uci-defaults"
@@ -211,12 +210,12 @@ fix_mk_def_depends() {
 
 
 
-remove_affinity_script() {
-    local affinity_script_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/init.d/set-irq-affinity"
-    if [ -f "$affinity_script_path" ]; then
-        \rm -f "$affinity_script_path"
-    fi
-}
+# remove_affinity_script() {
+#    local affinity_script_path="$BUILD_DIR/target/linux/qualcommax/ipq60xx/base-files/etc/init.d/set-irq-affinity"
+#    if [ -f "$affinity_script_path" ]; then
+#        \rm -f "$affinity_script_path"
+#    fi
+#}
 
 fix_build_for_openssl() {
     local makefile="$BUILD_DIR/package/libs/openssl/Makefile"
@@ -315,14 +314,7 @@ chanage_cpuusage() {
     find $BUILD_DIR/package/base-files/files/etc/uci-defaults/ -type f -name "9*.sh" -exec rm -f {} +
 }
 
-update_tcping() {
-    local tcping_path="$BUILD_DIR/feeds/small8/tcping/Makefile"
 
-    if [ -d "$(dirname "$tcping_path")" ] && [ -f "$tcping_path" ]; then
-        \rm -f "$tcping_path"
-        curl -L -o "$tcping_path" https://raw.githubusercontent.com/xiaorouji/openwrt-passwall-packages/refs/heads/main/tcping/Makefile
-    fi
-}
 
 set_custom_task() {
     local sh_dir="$BUILD_DIR/package/base-files/files/etc/init.d"
@@ -364,50 +356,8 @@ add_wg_chk() {
     fi
 }
 
-update_pw_ha_chk() {
-    local pw_ha_path="$BUILD_DIR/feeds/small8/luci-app-passwall/root/usr/share/passwall/haproxy_check.sh"
-    local new_path="$BASE_PATH/patches/haproxy_check.sh"
-    local ha_lua_path="$BUILD_DIR/feeds/small8/luci-app-passwall/root/usr/share/passwall/haproxy.lua"
 
-    if [ -f "$pw_ha_path" ]; then
-        rm -f "$pw_ha_path"
-    fi
 
-    install -m 755 -D "$new_path" "$pw_ha_path"
-
-    if [ -f $ha_lua_path ]; then
-        sed -i 's/rise 1 fall 3/rise 3 fall 2/g' "$ha_lua_path"
-    fi
-}
-
-#install_opkg_distfeeds() {
-    # 只处理aarch64
-#    if ! grep -q "nss-packages" "$BUILD_DIR/feeds.conf.default"; then
-#        return
-#    fi
-#    local emortal_def_dir="$BUILD_DIR/package/emortal/default-settings"
-#    local distfeeds_conf="$emortal_def_dir/files/99-distfeeds.conf"
-
-#    if [ -d "$emortal_def_dir" ] && [ ! -f "$distfeeds_conf" ]; then
-#        install -m 755 -D "$BASE_PATH/patches/99-distfeeds.conf" "$distfeeds_conf"
-
-#        sed -i "/define Package\/default-settings\/install/a\\
-# \\t\$(INSTALL_DIR) \$(1)/etc\\n\
-# \t\$(INSTALL_DATA) ./files/99-distfeeds.conf \$(1)/etc/99-distfeeds.conf\n" $emortal_def_dir/Makefile
-
-#        sed -i "/exit 0/i\\
-# [ -f \'/etc/99-distfeeds.conf\' ] && mv \'/etc/99-distfeeds.conf\' \'/etc/opkg/distfeeds.conf\'\n\
-# sed -ri \'/check_signature/s@^[^#]@#&@\' /etc/opkg.conf\n" $emortal_def_dir/files/99-default-settings
-#    fi
-# }
-
-# update_nss_pbuf_performance() {
-#    local pbuf_path="$BUILD_DIR/package/kernel/mac80211/files/pbuf.uci"
-#    if [ -d "$(dirname "$pbuf_path")" ] && [ -f $pbuf_path ]; then
-#        sed -i "s/auto_scale '1'/auto_scale 'off'/g" $pbuf_path
-#        sed -i "s/scaling_governor 'schedutil'/scaling_governor 'performance'/g" $pbuf_path
-#    fi
-# }
 
 main() {
     clone_repo
@@ -415,25 +365,25 @@ main() {
     reset_feeds_conf
     update_feeds
     remove_unwanted_packages
-    fix_default_set
-   # fix_miniupmpd
+   # fix_default_set
+    fix_miniupmpd
     update_golang
-    change_dnsmasq2full
-    chk_fullconenat
-    fix_mk_def_depends
+   # change_dnsmasq2full
+   # chk_fullconenat
+   # fix_mk_def_depends
    # add_wifi_default_set
    # update_default_lan_addr
    # remove_something_nss_kmod
-    remove_affinity_script
+   # remove_affinity_script
     fix_build_for_openssl
     update_ath11k_fw
     fix_mkpkg_format_invalid
     chanage_cpuusage
-    update_tcping
+   # update_tcping
     add_wg_chk
     add_ax6600_led
     set_custom_task
-    update_pw_ha_chk
+   # update_pw_ha_chk
    # install_opkg_distfeeds
    # update_nss_pbuf_performance
     install_feeds

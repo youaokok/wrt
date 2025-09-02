@@ -226,14 +226,14 @@ fix_build_for_openssl() {
         fi
     fi
 }
-
+# =https://github.com/padavanonly/immortalwrt-mt798x-6.6.git    youaokok/openwrt-66.x
 update_ath11k_fw() {
     local makefile="$BUILD_DIR/package/firmware/ath11k-firmware/Makefile"
     local new_mk="$BASE_PATH/patches/ath11k_fw.mk"
 
     if [ -d "$(dirname "$makefile")" ] && [ -f "$makefile" ]; then
         [ -f "$new_mk" ] && \rm -f "$new_mk"
-        curl -L -o "$new_mk" https://raw.githubusercontent.com/youaokok/openwrt-66.x/refs/heads/main/package/firmware/ath11k-firmware/Makefile
+        curl -L -o "$new_mk" https://raw.githubusercontent.compadavanonly/immortalwrt-mt798x-6.6/refs/heads/main/package/firmware/ath11k-firmware/Makefile
         \mv -f "$new_mk" "$makefile"
     fi
 }

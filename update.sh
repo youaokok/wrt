@@ -227,16 +227,16 @@ fix_build_for_openssl() {
     fi
 }
 # =https://github.com/padavanonly/immortalwrt-mt798x-6.6.git    youaokok/openwrt-66.x
-update_ath11k_fw() {
-    local makefile="$BUILD_DIR/package/firmware/ath11k-firmware/Makefile"
-    local new_mk="$BASE_PATH/patches/ath11k_fw.mk"
+# update_ath11k_fw() {
+#     local makefile="$BUILD_DIR/package/firmware/ath11k-firmware/Makefile"
+#     local new_mk="$BASE_PATH/patches/ath11k_fw.mk"
 
-    if [ -d "$(dirname "$makefile")" ] && [ -f "$makefile" ]; then
-        [ -f "$new_mk" ] && \rm -f "$new_mk"
-        curl -L -o "$new_mk" https://raw.githubusercontent.com/padavanonly/immortalwrt-mt798x-6.6/refs/heads/main/package/firmware/ath11k-firmware/Makefile
-        \mv -f "$new_mk" "$makefile"
-    fi
-}
+#     if [ -d "$(dirname "$makefile")" ] && [ -f "$makefile" ]; then
+#        [ -f "$new_mk" ] && \rm -f "$new_mk"
+#         curl -L -o "$new_mk" https://raw.githubusercontent.com/padavanonly/immortalwrt-mt798x-6.6/refs/heads/main/package/firmware/ath11k-firmware/Makefile
+#         \mv -f "$new_mk" "$makefile"
+ #    fi
+# }
 
 fix_mkpkg_format_invalid() {
     if [[ $BUILD_DIR =~ "imm-nss" ]]; then
@@ -376,7 +376,7 @@ main() {
    # remove_something_nss_kmod
    # remove_affinity_script
     fix_build_for_openssl
-    update_ath11k_fw
+   #  update_ath11k_fw
     fix_mkpkg_format_invalid
     chanage_cpuusage
    # update_tcping

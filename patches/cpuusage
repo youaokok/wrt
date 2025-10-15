@@ -1,19 +1,60 @@
 #!/bin/sh
 # Copyright (C) 2024 YumesomeZakura <1552037053@qq.com>
 
-cpu_usage=$(top -bn1 | head -n2 | awk -F'[ %]+' 'NR==2{print $2}')
+#cpu_usage=$(top -bn1 | head -n2 | awk -F'[ %]+' 'NR==2{print $2}')
+#combined_output=""
+
+#if [ -e "/sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi" ]; then
+#    nss_avg_utilization=$(awk 'NR==6 {print $2}' /sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi)
+#    combined_output="${combined_output}${nss_avg_utilization}"
+#fi
+
+#if [ -r "/sys/kernel/debug/ecm/ecm_db/connection_count_simple" ]; then
+#    connection_count=$(cat /sys/kernel/debug/ecm/ecm_db/connection_count_simple)
+#    echo -n "CPU: ${cpu_usage}% HWE: ${combined_output} ECM: ${connection_count}"
+#elif [ -n "$combined_output" ]; then
+#    echo -n "CPU: ${cpu_usage}% HWE: ${combined_output}"
+#else
+#    echo -n "CPU: ${cpu_usage}%"
+#fi
+
+# 获取 CPU 使用率（基于 /proc/stat，单次采样）
+get_cpu_usage() {
+    local cpu_line=$(head -n1 /proc/stat)
+    [ -z "$cpu_line" ] && { echo "0"; return; }
+    set -- $cpu_line
+    local user=$2 nice=$3 system=$4 idle=$5
+    local total=$((user + nice + system + idle))
+    local used=$((user + nice + system))
+    if [ $total -gt 0 ]; then
+        echo $((used * 100 / total))
+    else
+        echo "0"
+    fi
+}
+
+# 主逻辑
+cpu_usage=$(get_cpu_usage)
+
 combined_output=""
+nss_file="/sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi"
+ecm_file="/sys/kernel/debug/ecm/ecm_db/connection_count_simple"
 
-if [ -e "/sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi" ]; then
-    nss_avg_utilization=$(awk 'NR==6 {print $2}' /sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi)
-    combined_output="${combined_output}${nss_avg_utilization}"
+# 尝试读取 NSS 利用率
+if [ -r "$nss_file" ]; then
+    nss_avg_utilization=$(awk 'NR==6 {print $2; exit}' "$nss_file" 2>/dev/null)
+    [ -n "$nss_avg_utilization" ] && combined_output="HWE: ${nss_avg_utilization}"
 fi
 
-if [ -r "/sys/kernel/debug/ecm/ecm_db/connection_count_simple" ]; then
-    connection_count=$(cat /sys/kernel/debug/ecm/ecm_db/connection_count_simple)
-    echo -n "CPU: ${cpu_usage}% HWE: ${combined_output} ECM: ${connection_count}"
-elif [ -n "$combined_output" ]; then
-    echo -n "CPU: ${cpu_usage}% HWE: ${combined_output}"
-else
-    echo -n "CPU: ${cpu_usage}%"
+# 尝试读取 ECM 连接数
+if [ -r "$ecm_file" ]; then
+    connection_count=$(cat "$ecm_file" 2>/dev/null | awk '{print $1; exit}')
+    [ -n "$connection_count" ] && connection_count="ECM: ${connection_count}"
 fi
+
+# 组合输出（避免多余空格）
+output="CPU: ${cpu_usage}%"
+[ -n "$combined_output" ] && output="${output} ${combined_output}"
+[ -n "$connection_count" ] && output="${output} ${connection_count}"
+
+echo -n "$output"

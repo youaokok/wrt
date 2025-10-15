@@ -37,30 +37,17 @@ get_cpu_usage() {
 cpu_usage=$(get_cpu_usage)
 
 combined_output=""
-nss_file="/sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi"
-ecm_file="/sys/kernel/debug/ecm/ecm_db/connection_count_simple"
 
-# 尝试读取 NSS 利用率
-
-if [ -r "$nss_file" ]; then
-    # 改为读取 current_utilization（更实时）
-    nss_current_utilization=$(awk '/current_utilization:/ {print $2; exit}' "$nss_file" 2>/dev/null)
-    [ -n "$nss_current_utilization" ] && combined_output="HWE: ${nss_current_utilization}"
+if [ -e "/sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi" ]; then
+    nss_avg_utilization=$(awk 'NR==6 {print $2}' /sys/kernel/debug/qca-nss-drv/stats/cpu_load_ubi)
+    combined_output="${combined_output}${nss_avg_utilization}"
 fi
-#if [ -r "$nss_file" ]; then
-#    nss_avg_utilization=$(awk 'NR==6 {print $2; exit}' "$nss_file" 2>/dev/null)
-#    [ -n "$nss_avg_utilization" ] && combined_output="HWE: ${nss_avg_utilization}"
-#fi
 
-# 尝试读取 ECM 连接数
-if [ -r "$ecm_file" ]; then
+if [ -r "/sys/kernel/debug/ecm/ecm_db/connection_count_simple" ]; then
     connection_count=$(cat /sys/kernel/debug/ecm/ecm_db/connection_count_simple)
-    [ -n "$connection_count" ] && connection_count="ECM: ${connection_count}"
+    echo -n "CPU: ${cpu_usage}% HWE: ${combined_output} ECM: ${connection_count}"
+elif [ -n "$combined_output" ]; then
+    echo -n "CPU: ${cpu_usage}% HWE: ${combined_output}"
+else
+    echo -n "CPU: ${cpu_usage}%"
 fi
-
-# 组合输出（避免多余空格）
-output="CPU: ${cpu_usage}%"
-[ -n "$combined_output" ] && output="${output} ${combined_output}"
-[ -n "$connection_count" ] && output="${output} ${connection_count}"
-
-echo -n "$output"

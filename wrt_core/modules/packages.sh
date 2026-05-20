@@ -10,7 +10,7 @@ remove_unwanted_packages() {
     local packages_net=(
         "haproxy" "xray-core" "xray-plugin" "dns2socks" "alist" "hysteria"
         "mosdns" "adguardhome" "ddns-go" "naiveproxy" "shadowsocks-rust"
-        "sing-box" "v2ray-core" "v2ray-geodata" "v2ray-plugin" "tuic-client"
+        "v2ray-core" "v2ray-geodata" "v2ray-plugin" "tuic-client"
         "chinadns-ng" "ipt2socks" "tcping" "trojan-plus" "simple-obfs" "shadowsocksr-libev"
         "dae" "daed" "mihomo" "geoview" "open-app-filter" "msd_lite"
     )
@@ -148,18 +148,18 @@ install_custom_feed() {
 
     local base_custom_feed_packages=(
         xray-core xray-plugin dns2tcp dns2socks haproxy hysteria \
-        naiveproxy shadowsocks-rust sing-box v2ray-core v2ray-geodata geoview v2ray-plugin \
+        naiveproxy shadowsocks-rust v2ray-core v2ray-geodata geoview v2ray-plugin \
         tuic-client chinadns-ng ipt2socks tcping trojan-plus simple-obfs shadowsocksr-libev \
         v2dat adguardhome luci-app-adguardhome ddns-go \
         luci-app-ddns-go taskd luci-lib-xterm luci-lib-taskd luci-app-store quickstart \
         luci-app-quickstart luci-app-istorex luci-app-cloudflarespeedtest netdata luci-app-netdata \
-        lucky luci-app-lucky luci-app-openclash luci-app-homeproxy luci-app-amlogic \
+        lucky luci-app-lucky luci-app-openclash luci-app-amlogic \
         oaf open-app-filter luci-app-oaf easytier luci-app-easytier \
         msd_lite luci-app-msd_lite cups luci-app-cupsd
     )
     local required_feed_dirs=(
         cups tcping v2ray-geodata luci-lib-taskd luci-app-openclash
-        luci-app-quickstart luci-app-store luci-app-homeproxy luci-app-mosdns
+        luci-app-quickstart luci-app-store luci-app-mosdns
         luci-app-passwall nikki luci-app-nikki mihomo-meta
         open-app-filter luci-app-oaf lucky luci-app-lucky luci-app-easytier
     )
@@ -300,19 +300,19 @@ add_ax6600_led() {
     fi
 }
 
-update_homeproxy() {
-    local repo_url="https://github.com/immortalwrt/homeproxy.git"
-    local target_dir="$(get_custom_feed_worktree_dir)/luci-app-homeproxy"
-
-    if [ -d "$target_dir" ]; then
-        echo "正在更新 homeproxy..."
-        rm -rf "$target_dir"
-        if ! git clone --depth 1 "$repo_url" "$target_dir"; then
-            echo "错误：从 $repo_url 克隆 homeproxy 仓库失败" >&2
-            exit 1
-        fi
-    fi
-}
+# update_homeproxy() {
+#    local repo_url="https://github.com/immortalwrt/homeproxy.git"
+#    local target_dir="$(get_custom_feed_worktree_dir)/luci-app-homeproxy"
+#
+#    if [ -d "$target_dir" ]; then
+#        echo "正在更新 homeproxy..."
+#        rm -rf "$target_dir"
+#        if ! git clone --depth 1 "$repo_url" "$target_dir"; then
+#            echo "错误：从 $repo_url 克隆 homeproxy 仓库失败" >&2
+#            exit 1
+#        fi
+#    fi
+# }
 
 add_timecontrol() {
     local timecontrol_dir="$BUILD_DIR/package/luci-app-timecontrol"
@@ -431,34 +431,34 @@ update_smartdns() {
     fi
 }
 
-update_diskman() {
-    local path="$BUILD_DIR/feeds/luci/applications/luci-app-diskman"
-    local repo_url="https://github.com/lisaac/luci-app-diskman.git"
-    if [ -d "$path" ]; then
-        echo "正在更新 diskman..."
-        cd "$BUILD_DIR/feeds/luci/applications" || return
-        \rm -rf "luci-app-diskman"
+# update_diskman() {
+#    local path="$BUILD_DIR/feeds/luci/applications/luci-app-diskman"
+#    local repo_url="https://github.com/lisaac/luci-app-diskman.git"
+#    if [ -d "$path" ]; then
+#        echo "正在更新 diskman..."
+#        cd "$BUILD_DIR/feeds/luci/applications" || return
+#        \rm -rf "luci-app-diskman"
+#
+#        if ! git clone --filter=blob:none --no-checkout "$repo_url" diskman; then
+#            echo "错误：从 $repo_url 克隆 diskman 仓库失败" >&2
+#            exit 1
+#        fi
+#        cd diskman || return
 
-        if ! git clone --filter=blob:none --no-checkout "$repo_url" diskman; then
-            echo "错误：从 $repo_url 克隆 diskman 仓库失败" >&2
-            exit 1
-        fi
-        cd diskman || return
+ #       git sparse-checkout init --cone
+ #       git sparse-checkout set applications/luci-app-diskman || return
 
-        git sparse-checkout init --cone
-        git sparse-checkout set applications/luci-app-diskman || return
+  #      git checkout --quiet
 
-        git checkout --quiet
+ #       mv applications/luci-app-diskman ../luci-app-diskman || return
+ #       cd .. || return
+ #       \rm -rf diskman
+ #       cd "$BUILD_DIR"
 
-        mv applications/luci-app-diskman ../luci-app-diskman || return
-        cd .. || return
-        \rm -rf diskman
-        cd "$BUILD_DIR"
-
-        sed -i 's/fs-ntfs /fs-ntfs3 /g' "$path/Makefile"
-        sed -i '/ntfs-3g-utils /d' "$path/Makefile"
-    fi
-}
+#        sed -i 's/fs-ntfs /fs-ntfs3 /g' "$path/Makefile"
+#        sed -i '/ntfs-3g-utils /d' "$path/Makefile"
+#    fi
+# }
 
 _sync_luci_lib_docker() {
     local lib_path="$BUILD_DIR/feeds/luci/libs/luci-lib-docker"
@@ -488,40 +488,40 @@ _sync_luci_lib_docker() {
     fi
 }
 
-update_dockerman() {
-    local path="$BUILD_DIR/feeds/luci/applications/luci-app-dockerman"
-    local repo_url="https://github.com/lisaac/luci-app-dockerman.git"
+# update_dockerman() {
+#    local path="$BUILD_DIR/feeds/luci/applications/luci-app-dockerman"
+#    local repo_url="https://github.com/lisaac/luci-app-dockerman.git"
 
-    if [ -d "$path" ]; then
-        echo "正在更新 dockerman..."
-        _sync_luci_lib_docker || return
-        
-        cd "$BUILD_DIR/feeds/luci/applications" || return
-        \rm -rf "luci-app-dockerman"
-
-        if ! git clone --filter=blob:none --no-checkout "$repo_url" dockerman; then
-            echo "错误：从 $repo_url 克隆 dockerman 仓库失败" >&2
-            exit 1
-        fi
-        cd dockerman || return
-
-        git sparse-checkout init --cone
-        git sparse-checkout set applications/luci-app-dockerman || return
-
-        git checkout --quiet
-
-        mv applications/luci-app-dockerman ../luci-app-dockerman || return
-        cd .. || return
-        \rm -rf dockerman
-        cd "$BUILD_DIR"
-
-        if declare -F docker_stack_sync_dockerman_nftables_compat >/dev/null 2>&1; then
-            docker_stack_sync_dockerman_nftables_compat "$BUILD_DIR" "0" || return 1
-        fi
-
-        echo "dockerman 更新完成"
-    fi
-}
+#     if [ -d "$path" ]; then
+#        echo "正在更新 dockerman..."
+#        _sync_luci_lib_docker || return
+#        
+#        cd "$BUILD_DIR/feeds/luci/applications" || return
+#        \rm -rf "luci-app-dockerman"
+#
+#        if ! git clone --filter=blob:none --no-checkout "$repo_url" dockerman; then
+#            echo "错误：从 $repo_url 克隆 dockerman 仓库失败" >&2
+#            exit 1
+#        fi
+#        cd dockerman || return
+#
+#        git sparse-checkout init --cone
+#        git sparse-checkout set applications/luci-app-dockerman || return
+#
+#        git checkout --quiet
+#
+#        mv applications/luci-app-dockerman ../luci-app-dockerman || return
+#        cd .. || return
+#        \rm -rf dockerman
+#        cd "$BUILD_DIR"
+#
+#        if declare -F docker_stack_sync_dockerman_nftables_compat >/dev/null 2>&1; then
+#            docker_stack_sync_dockerman_nftables_compat "$BUILD_DIR" "0" || return 1
+#        fi
+#
+#        echo "dockerman 更新完成"
+#    fi
+# }
 
 add_quickfile() {
     local repo_url="https://github.com/sbwml/luci-app-quickfile.git"
